@@ -3,6 +3,7 @@ import time
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
+from math import ceil
 from clint.textui import puts, colored, indent
 
 def normalize(s):
@@ -17,6 +18,22 @@ def normalize(s):
         s = s.replace(a, b).replace(a.upper(), b.upper()).replace(' ','_').lower().replace('/','')
     return s
 
+def get_previous_week(dt):
+    
+    first_day = dt.replace(day=1)
+
+    day_of_month = dt.day
+
+    if(first_day.weekday() == 6):
+       adjusted_dom = (1 + first_day.weekday()) / 7
+    else:
+       adjusted_dom = day_of_month + first_day.weekday()
+
+    week_no = int(ceil(adjusted_dom/7.0))
+
+    return week_no - 1 if week_no > 1 else 4
+
+
 class ScrapperMarketAgriculture:
     total_records = 0
     inserted_records = 0
@@ -24,14 +41,14 @@ class ScrapperMarketAgriculture:
 
     base_url = 'http://www.economia-sniim.gob.mx/NUEVO/Consultas/MercadosNacionales/PreciosDeMercado/Agricolas'
     init_urls = [
-        ['Frutas y Hortalizas', '/ConsultaFrutasYHortalizas.aspx', '/ResultadosConsultaFechaFrutasYHortalizas.aspx'],
+        #['Frutas y Hortalizas', '/ConsultaFrutasYHortalizas.aspx', '/ResultadosConsultaFechaFrutasYHortalizas.aspx'],
         #['Flores', '/ConsultaFlores.aspx?SubOpcion=5', '/ResultadosConsultaFechaFlores.aspx'],
-        ['Granos', '/ConsultaGranos.aspx?SubOpcion=6', '/ResultadosConsultaFechaGranos.aspx']
-        #['Aceites', '/ConsultaAceites.aspx?SubOpcion=8', '/ResultadosConsultaFechaAceites.aspx']
+        # ['Granos', '/ConsultaGranos.aspx?SubOpcion=6', '/ResultadosConsultaFechaGranos.aspx']
+        ['Aceites', '/ConsultaAceites.aspx?SubOpcion=8', '/ResultadosConsultaFechaAceite.aspx']
     ]
 
     def __init__(self, *args, **kwargs):
-        self.is_historic = kwargs.get('is_historic', False)
+        pass
 
     def read_category(self, category, url, url_form):
         category_page = requests.get(self.base_url + url)
@@ -47,25 +64,22 @@ class ScrapperMarketAgriculture:
             with indent(4):
                 puts(colored.magenta("Producto: {}".format(str(product_name))))
 
-            if self.is_historic:
-                for year in range(1999, 2023):
-                    payload = {
-                        'fechaInicio':'01/01/{0}'.format(str(year)),
-                        'fechaFinal':'01/01/{0}'.format(str(year + 1)),
-                        'ProductoId':product_id,
-                        'OrigenId':'-1',
-                        'Origen':'Todos',
+            today = datetime.datetime.today()
+            deleta = datetime.timedelta(days=-1)
+            if category == 'Aceites':
+                payload = {
+                        'Semana': get_previous_week(today),
+                        'Mes':9,
+                        'Anio':2023,
+                        'AceiteId':product_id,
                         'DestinoId':'-1',
                         'Destino':'Todos',
-                        'PreciosPorId':'2',
                         'RegistrosPorPagina':'1000'
                     }
 
-                    if not self.gather_prices(payload, url_form, product_name):
-                        next
-            else:
-                today = datetime.datetime.today()
-                deleta = datetime.timedelta(days=-1)
+                if not self.gather_prices(payload, url_form, product_name, category):
+                    next
+            elif category == 'Frutas y Hortalizas':
                 payload = {
                         'fechaInicio':'{}'.format(today.strftime('%d/%m/%Y')),
                         'fechaFinal':'{}'.format((today).strftime('%d/%m/%Y')),
@@ -78,7 +92,7 @@ class ScrapperMarketAgriculture:
                         'RegistrosPorPagina':'1000'
                     }
 
-                if not self.gather_prices(payload, url_form, product_name):
+                if not self.gather_prices(payload, url_form, product_name, category):
                     continue
 
         return
@@ -91,7 +105,7 @@ class ScrapperMarketAgriculture:
             self.read_category(category, url, url_form)
             time.sleep(30)
 
-    def gather_prices(self, payload, url_form, product_name):
+    def gather_prices(self, payload, url_form, product_name, category):
 
         with indent(4):
             puts(colored.blue("Peticion: {}".format(str(payload))))
@@ -109,6 +123,7 @@ class ScrapperMarketAgriculture:
 
         try:
             table_prices = product_prices.select_one('table#tblResultados')
+        
         except Exception as error:
             with indent(4):
                 puts(colored.red("Error en el parseo: {}".format(str(error))))
@@ -147,7 +162,7 @@ class ScrapperMarketAgriculture:
             
         
         if not df.empty:
-            df.to_csv(f"./data/sniim/{normalize(product_name).split('_-_')[0]}.csv")
+            df.to_csv(f"./data/sniim/{normalize(category)}/{normalize(product_name).split('_-_')[0]}.csv", index=False)
             
         return True
 
