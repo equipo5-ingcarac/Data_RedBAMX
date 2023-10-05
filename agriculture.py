@@ -100,7 +100,7 @@ class ScrapperMarketAgriculture:
                     'DestinoId':'-1',
                     'Destino':'Todos',
                     'PreciosPorId':'2',
-                    'RegistrosPorPagina':'1000'
+                    'RegistrosPorPagina':'2000'
                 }
 
                 if not self.gather_prices(payload, url_form, product_name, year):
@@ -133,20 +133,17 @@ class ScrapperMarketAgriculture:
         
         with open("./info_sniim.txt", 'w') as f:
             f.write("Archivos sobre personas desaparecidas\n")
-            info = """
-            Datos de desaparecidos, corte nacional y desagregación a nivel estatal, 
-            por edad, por sexo, por nacionalidad, por año de desaparición y por mes
-            de desaparición para los últimos 12 meses.
+            info = f"""
+            Datos de precios registrados a nivel nacional para distintos productos agricolas en distintas centrales de abasto del pais.
 
-            Los datos se obtuvieron del RNPDNO con fecha de 03 de agosto de 2021
-            (la base de datos no se ha actualizado últimamente) 
+            Los datos se obtuvieron del Sistema Nacional de Informacion e Integracion de Mercados de la Secretaria de Economia
+            con fecha desde el 1 de enero de 2020 hasta la fecha ({datetime.datetime.today().strftime("%d-%m-%Y")})
 
+            Los datos son recibidos en forma de tablas HTML y almacenados en archivos CSVs para su posterior tratamiento.
             """ 
             f.write(info + '\n')
             f.write("Descargado el " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
-            f.write("Desde: " + self.base_url + "\n")
-            f.write("Agregados nacionales descargados desde: " + desaparecidos_corte_nacional_url + "\n")
-            f.write("Nombre: " + desaparecidos_corte_nacional_archivo + "\n")
+            f.write("Desde: " + self.base_url)
 
     def gather_prices(self, payload, url_form, product_name, year):
 
@@ -187,14 +184,15 @@ class ScrapperMarketAgriculture:
                 counter_field = 0
 
                 for metric in observation.find_all('td'):
-                    row[fields[counter_field]] = metric.getText()
+                    row[fields[counter_field]] = [metric.getText()]
                     self.total_rows += 1
                     counter_field += 1
 
-                with indent(4):
-                    puts(colored.yellow("Insertando: {}".format(str(row))))
+                #with indent(4):
+                #    puts(colored.yellow("Insertando: {}".format(str(row))))
                 
-                df = df.append(row,ignore_index=True)
+                row_df = pd.DataFrame(row)
+                df = pd.concat([df,row_df], ignore_index=True)
 
                 # if self.mongo.insert_one(row):
                 #     self.inserted_records += 1
