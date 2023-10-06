@@ -47,9 +47,6 @@ class ScrapperMarketAgriculture:
     base_url = 'http://www.economia-sniim.gob.mx/NUEVO/Consultas/MercadosNacionales/PreciosDeMercado/Agricolas'
     init_urls = [
         ['Frutas y Hortalizas', '/ConsultaFrutasYHortalizas.aspx', '/ResultadosConsultaFechaFrutasYHortalizas.aspx']
-        #['Flores', '/ConsultaFlores.aspx?SubOpcion=5', '/ResultadosConsultaFechaFlores.aspx'],
-        #['Granos', '/ConsultaGranos.aspx?SubOpcion=6', '/ResultadosConsultaFechaGranos.aspx']
-        #['Aceites', '/ConsultaAceites.aspx?SubOpcion=8', '/ResultadosConsultaFechaAceite.aspx']
     ]
 
     headers = {
@@ -106,22 +103,6 @@ class ScrapperMarketAgriculture:
                 if not self.gather_prices(payload, url_form, product_name, year):
                     next
 
-            # else:
-            #     payload = {
-            #             'fechaInicio':'{}'.format(today.strftime('%d/%m/%Y')),
-            #             'fechaFinal':'{}'.format((today).strftime('%d/%m/%Y')),
-            #             'ProductoId':product_id,
-            #             'OrigenId':'-1',
-            #             'Origen':'Todos',
-            #             'DestinoId':'-1',
-            #             'Destino':'Todos',
-            #             'PreciosPorId':'2',
-            #             'RegistrosPorPagina':'1000'
-            #         }
-
-            #     if not self.gather_prices(payload, url_form, product_name, category):
-            #         continue
-
         return
 
     def scraping(self):
@@ -144,10 +125,12 @@ class ScrapperMarketAgriculture:
             f.write(info + '\n')
             f.write("Descargado el " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
             f.write("Desde: " + self.base_url)
+            f.write(f"Registros recuperados: {self.total_rows}")
 
     def gather_prices(self, payload, url_form, product_name, year):
 
         if os.path.exists(f"./data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv"):
+            puts(colored.red(f"Ya existe registro: {normalize(product_name).split('_-_')[0]}_{year}.csv"))
             return
 
         with indent(4):
@@ -162,8 +145,6 @@ class ScrapperMarketAgriculture:
 
         product_prices = BeautifulSoup(response.content, features="html.parser")
 
-        # pagination = product_prices.select_one('span#lblPaginacion').getText().split(' ')[-1]
-
         try:
             table_prices = product_prices.select_one('table#tblResultados')
         
@@ -177,7 +158,6 @@ class ScrapperMarketAgriculture:
         
         df = pd.DataFrame(columns=fields)
 
-        # print(table_prices)
         for observation in table_prices.find_all('tr'):
             if counter_row > 1:
                 row = {}
@@ -187,20 +167,9 @@ class ScrapperMarketAgriculture:
                     row[fields[counter_field]] = [metric.getText()]
                     self.total_rows += 1
                     counter_field += 1
-
-                #with indent(4):
-                #    puts(colored.yellow("Insertando: {}".format(str(row))))
                 
                 row_df = pd.DataFrame(row)
                 df = pd.concat([df,row_df], ignore_index=True)
-
-                # if self.mongo.insert_one(row):
-                #     self.inserted_records += 1
-                #     with indent(4):
-                #         puts(colored.green("Insertado: {}".format(str(row))))
-                # else:
-                #     with indent(4):
-                #         puts(colored.red("No Insertado: {}".format(str(row))))
 
             self.total_records += 1
             counter_row += 1
@@ -216,6 +185,3 @@ class ScrapperMarketAgriculture:
 if __name__ == '__main__':
     agricola = ScrapperMarketAgriculture()
     agricola.scraping()
-
-#     vacas = ScrapperMarketLiveStock()
-#     vacas.scraping()
