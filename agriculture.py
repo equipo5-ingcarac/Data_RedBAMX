@@ -1,5 +1,6 @@
 import datetime
 import os
+import random
 import time
 from math import ceil
 from bs4 import BeautifulSoup
@@ -78,8 +79,7 @@ class ScrapperMarketAgriculture:
             if product_id == '-1':
                 continue
 
-            with indent(4):
-                puts(colored.magenta("Producto: {}".format(str(product_name))))
+            puts(colored.magenta("Producto: {}".format(str(product_name))))
 
             today = datetime.datetime.today()
             for year in range(2020, today.year + 1):
@@ -97,7 +97,7 @@ class ScrapperMarketAgriculture:
                     'DestinoId':'-1',
                     'Destino':'Todos',
                     'PreciosPorId':'2',
-                    'RegistrosPorPagina':'2000'
+                    'RegistrosPorPagina':'5000'
                 }
 
                 if not self.gather_prices(payload, url_form, product_name, year):
@@ -124,7 +124,7 @@ class ScrapperMarketAgriculture:
             """ 
             f.write(info + '\n')
             f.write("Descargado el " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
-            f.write("Desde: " + self.base_url)
+            f.write("Desde: " + self.base_url + "\n")
             f.write(f"Registros recuperados: {self.total_rows}")
 
     def gather_prices(self, payload, url_form, product_name, year):
@@ -133,14 +133,12 @@ class ScrapperMarketAgriculture:
             puts(colored.red(f"Ya existe registro: {normalize(product_name).split('_-_')[0]}_{year}.csv"))
             return
 
-        with indent(4):
-            puts(colored.blue("Peticion: {}".format(str(payload))))
+        puts(colored.blue("Peticion: {}".format(str(payload))))
 
         response = requests.get(self.base_url + url_form, params=payload, headers=self.headers)
 
         if response.status_code != 200:
-            with indent(4):
-                puts(colored.red("Error en la peticion HTTP: {}".format(str(response.text))))
+            puts(colored.red("Error en la peticion HTTP: {}".format(str(response.text))))
             return False
 
         product_prices = BeautifulSoup(response.content, features="html.parser")
@@ -149,8 +147,7 @@ class ScrapperMarketAgriculture:
             table_prices = product_prices.select_one('table#tblResultados')
         
         except Exception as error:
-            with indent(4):
-                puts(colored.red("Error en el parseo: {}".format(str(error))))
+            puts(colored.red("Error en el parseo: {}".format(str(error))))
             return False
 
         fields = ('fecha', 'presentacion', 'origen', 'destino', 'precio_min', 'precio_max', 'precio_frec', 'obs')
@@ -178,7 +175,7 @@ class ScrapperMarketAgriculture:
         if not df.empty:
             df.to_csv(f"./data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv", index=False)
             
-        time.sleep(1)
+        time.sleep(random.uniform(0,1))
         return True
 
 
