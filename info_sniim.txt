@@ -7,6 +7,6 @@ Archivos sobre personas desaparecidas
 
             Los datos son recibidos en forma de tablas HTML y almacenados en archivos CSVs para su posterior tratamiento.
             
-Descargado el 2023-10-05 20:58:50
+Descargado el 2023-10-05 21:50:00
 Desde: http://www.economia-sniim.gob.mx/NUEVO/Consultas/MercadosNacionales/PreciosDeMercado/Agricolas
 Registros recuperados: 0
