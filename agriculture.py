@@ -97,7 +97,7 @@ class ScrapperMarketAgriculture:
                     'DestinoId':'-1',
                     'Destino':'Todos',
                     'PreciosPorId':'2',
-                    'RegistrosPorPagina':'2000'
+                    'RegistrosPorPagina':'20000'
                 }
 
                 if not self.gather_prices(payload, url_form, product_name, year):
@@ -108,6 +108,9 @@ class ScrapperMarketAgriculture:
     def scraping(self):
         self.total_records = 0
         self.inserted_records = 0
+
+        if not os.path.exists("./data/sniim"):
+            os.mkdir("./data/sniim")
 
         for category, url, url_form in self.init_urls:
             self.read_category(category, url, url_form)
