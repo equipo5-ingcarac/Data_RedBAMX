@@ -3,10 +3,10 @@ Archivos sobre personas desaparecidas
             Datos de precios registrados a nivel nacional para distintos productos agricolas en distintas centrales de abasto del pais.
 
             Los datos se obtuvieron del Sistema Nacional de Informacion e Integracion de Mercados de la Secretaria de Economia
-            con fecha desde el 1 de enero de 2020 hasta la fecha (06-10-2023)
+            con fecha desde el 1 de enero de 2020 hasta la fecha (07-10-2023)
 
             Los datos son recibidos en forma de tablas HTML y almacenados en archivos CSVs para su posterior tratamiento.
             
-Descargado el 2023-10-06 23:11:40
+Descargado el 2023-10-07 16:13:19
 Desde: http://www.economia-sniim.gob.mx/NUEVO/Consultas/MercadosNacionales/PreciosDeMercado/Agricolas
-Registros recuperados: 13628056
+Registros recuperados: 2019574

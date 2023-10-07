@@ -133,10 +133,10 @@ class ScrapperMarketAgriculture:
     def gather_prices(self, payload, url_form, product_name, year):
 
         if os.path.exists(f"./data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv"):
-            puts(colored.red(f"Ya existe registro: {normalize(product_name).split('_-_')[0]}_{year}.csv"))
+            #puts(colored.red(f"Ya existe registro: {normalize(product_name).split('_-_')[0]}_{year}.csv"))
             return
 
-        puts(colored.blue("Peticion: {}".format(str(payload))))
+        #puts(colored.blue("Peticion: {}".format(str(payload))))
 
         response = requests.get(self.base_url + url_form, params=payload, headers=self.headers)
 
