@@ -97,7 +97,7 @@ class ScrapperMarketAgriculture:
                     'DestinoId':'-1',
                     'Destino':'Todos',
                     'PreciosPorId':'2',
-                    'RegistrosPorPagina':'5000'
+                    'RegistrosPorPagina':'2000'
                 }
 
                 if not self.gather_prices(payload, url_form, product_name, year):
