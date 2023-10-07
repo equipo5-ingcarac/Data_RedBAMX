@@ -165,7 +165,6 @@ class ScrapperMarketAgriculture:
 
                 for metric in observation.find_all('td'):
                     row[fields[counter_field]] = [metric.getText()]
-                    self.total_rows += 1
                     counter_field += 1
                 
                 row_df = pd.DataFrame(row)
@@ -176,9 +175,10 @@ class ScrapperMarketAgriculture:
             
         
         if not df.empty:
+            self.total_rows += df.shape[0]
             df.to_csv(f"./data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv", index=False)
             
-        time.sleep(random.uniform(0,1))
+        time.sleep(random.uniform(0,0.5))
         return True
 
 
