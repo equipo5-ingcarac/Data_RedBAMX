@@ -1,0 +1,11 @@
+Archivos sobre cultivos a nivel municipal
+
+    Datos de superficie cultivada, cosechada y siniestrada para diversos cultivos a nivel nacional.
+
+    Los datos se obtuvieron del Servicio de Informacion Agroalimentaria y Pesquera de la Secretaria de Agricultura y Desarrollo Rural
+    con fecha desde el 1 de enero de 2020 hasta la fecha (07-10-2023)
+
+    Los datos son recibidos en forma de tablas HTML y almacenados en archivos CSVs para su posterior tratamiento.
+    
+Descargado el 2023-10-07 15:41:52
+Desde: https://nube.siap.gob.mx/avance_agricola/
