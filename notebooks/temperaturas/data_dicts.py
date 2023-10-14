@@ -1,6 +1,6 @@
 import json
 
-with open("idsSIAP.json",encoding='utf8') as json_file:
+with open("../descarga/idsSIAP.json",encoding='utf8') as json_file:
     dict_ids = json.load(json_file)
 
 dict_cultivos = {k.split('_')[1]:v for k,v in dict_ids.items() if k.startswith("cultivo")}

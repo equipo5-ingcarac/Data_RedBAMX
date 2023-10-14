@@ -11,7 +11,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-data_dir = "./data/siap"
+data_dir = "../../data/siap"
 
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
