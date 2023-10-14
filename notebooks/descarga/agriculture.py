@@ -109,13 +109,13 @@ class ScrapperMarketAgriculture:
         self.total_records = 0
         self.inserted_records = 0
 
-        if not os.path.exists("./data/sniim"):
-            os.mkdir("./data/sniim")
+        if not os.path.exists("../../data/sniim"):
+            os.mkdir("../../data/sniim")
 
         for category, url, url_form in self.init_urls:
             self.read_category(category, url, url_form)
         
-        with open("./info_sniim.txt", 'w') as f:
+        with open("../../logs/info_sniim.txt", 'w') as f:
             f.write("Archivos sobre personas desaparecidas\n")
             info = f"""
             Datos de precios registrados a nivel nacional para distintos productos agricolas en distintas centrales de abasto del pais.
@@ -132,7 +132,7 @@ class ScrapperMarketAgriculture:
 
     def gather_prices(self, payload, url_form, product_name, year):
 
-        if os.path.exists(f"./data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv"):
+        if os.path.exists(f"../../data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv"):
             #puts(colored.red(f"Ya existe registro: {normalize(product_name).split('_-_')[0]}_{year}.csv"))
             return
 
@@ -176,7 +176,7 @@ class ScrapperMarketAgriculture:
         
         if not df.empty:
             self.total_rows += df.shape[0]
-            df.to_csv(f"./data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv", index=False)
+            df.to_csv(f"../../data/sniim/{normalize(product_name).split('_-_')[0]}_{year}.csv", index=False)
             
         time.sleep(random.uniform(0,0.5))
         return True
