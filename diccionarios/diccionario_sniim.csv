@@ -1,0 +1,11 @@
+Columna,Descripcion
+fecha,Fecha en la que se levanto la encuesta
+product,Producto al que hace referencia la entrada/muestra
+presentacion,Presentacion del producto al que se hace referencia
+origen,Entidad Federativa de donde proviene el producto
+destino,Entidad Federativa hacia donde llego el producto
+central,Central de abastos/centro de distribucion de donde se obtuvo la informacion
+precio_min,El valor más bajo de la cotización dentro de una muestra (MXN)
+precio_max,El valor más alto de la cotización dentro de una muestra (MXN)
+precio_frec,Es el dato que más se repite en la muestra (moda) (MXN)
+obs,Observaciones encontradas para la muestra
