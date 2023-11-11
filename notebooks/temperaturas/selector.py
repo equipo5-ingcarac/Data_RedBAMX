@@ -1,6 +1,4 @@
 import data_dicts as dicts
-import json
-
 
 ciclos = list(dicts.dict_ciclos.keys())
 cultivos = list(dicts.dict_cultivos.keys())
