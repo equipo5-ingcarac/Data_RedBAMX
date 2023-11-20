@@ -1,0 +1,11 @@
+bs4
+pandas
+requests
+clint
+numpy
+matplotlib
+great_expectations
+seaborn
+ipywidgets
+lxml
+pyarrow
