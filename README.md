@@ -29,9 +29,9 @@ Red de Bancos de Alimentos (Red Bamx) es una OSC sin fines de lucro y apartidist
 # Datos
 
 Los datos se han recopilado de varias fuentes del gobierno de México:
--	Servicio de Información Agroalimentaria y Pesquera de la Secretaria de Agricultura y Desarrollo Rural.
--	Sistema Nacional de e Integración de mercados (SNIIM) de la secretaria de economía.
 
+- Servicio de Información Agroalimentaria y Pesquera de la Secretaria de Agricultura y Desarrollo Rural.
+- Sistema Nacional de e Integración de mercados (SNIIM) de la secretaria de economía.
 
 ## SIAP
 
@@ -41,9 +41,9 @@ El Servicio de Información Agroalimentaria y Pesquera (SIAP), órgano administr
 
 Se adquirieron datos de la página del SIAP https://nube.siap.gob.mx/avance_agricola/, cuales son referentes a información estadística de 64 cultivos que son sembrados y cosechados a lo largo de México.
 
-En la libreta ``API_SIAP_Descarga.ipynb`` se pueden descargar todos los datos referentes a todos los productos sembrados y cultivados en cada uno de los municipios de México, del 2020 al 2021. Este archivo utiliza web scaping para adquirir tablas de cada uno de los productos en XML, y transformándolos en `*.csv`.
+En la libreta `API_SIAP_Descarga.ipynb` se pueden descargar todos los datos referentes a todos los productos sembrados y cultivados en cada uno de los municipios de México, del 2020 al 2021. Este archivo utiliza web scaping para adquirir tablas de cada uno de los productos en XML, y transformándolos en `*.csv`.
 
-Una vez descargado todos los datos, la libreta `clean_data_SIAP` concatena, procesa y limpia los datos en un sola base de datos Tidy para almacenarlos en un archivo con formato ``parquet``.
+Una vez descargado todos los datos, la libreta `clean_data_SIAP` concatena, procesa y limpia los datos en un sola base de datos Tidy para almacenarlos en un archivo con formato `parquet`.
 
 ## SNIIM
 
@@ -65,11 +65,13 @@ O bien, se puede ejecutar directamente en una libreta ejecutando la siguiente li
 !python3 agriculture.py
 ```
 
-
 Una vez recuperados los datos para cada producto, estos se almacenan en diversos archivos de tipo csv en el directorio `./data/sniim`, los nombres para cada muestra son de la forma `producto_año.csv`. **Es importante notar que debido a la cantidad de datos recuperados, este script puede tomar entre 1 y 3 horas en recuperar los datos, dependiendo de diversos factores.**
 
 Una vez almacendaos los datos los datos, en la libreta `Data_SNIIM.ipynb`, los datos son recopilados en una dataframe de pandas, se limpian los datos faltantes y se realizan los procesamientos necesarios para que cada columna tenga el tipo de dato que le corresponde (`datetime`,`float`,`etc`).
 
+## Dashboard de PowerBI
+
+https://app.powerbi.com/groups/me/reports/5e27c433-caef-415c-8d13-a2384b9a0be8/ReportSection?experience=power-bi
 
 # Integrantes
 
